@@ -5,7 +5,14 @@ import logger from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
 
-
+mongoose
+  .connect(process.env.MONGO)
+  .then(() => {
+    console.log("Mongodb is connected");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
 
 var app = express();
 
