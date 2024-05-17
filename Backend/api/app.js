@@ -4,9 +4,10 @@ import cookieParser from "cookie-parser";
 import logger from "morgan";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+dotenv.config();
 
 mongoose
-  .connect(process.env.MONGO)
+  .connect("mongodb+srv://rohit:rohit@mern-estate.mohmtgd.mongodb.net/mern-estate?retryWrites=true&w=majority")
   .then(() => {
     console.log("Mongodb is connected");
   })
