@@ -1,24 +1,32 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Alert } from "flowbite-react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 function Signin() {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [formData, setFormData] = useState([]);
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [loading, setLoading] = useState(false);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
 
+  //user is the name of the slice we created 
+  const {loading,error}=useSelector((state)=>state.user)
+
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if ( !formData.email || !formData.password) {
+    if (!formData.email || !formData.password) {
       return setErrorMessage("All fields are required .");
     }
 
     try {
-      setLoading(true);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: {
@@ -26,22 +34,19 @@ function Signin() {
         },
         body: JSON.stringify(formData),
       });
-      const data =await res.json();
+      const data = await res.json();
       if (data.success === false) {
-        setLoading(false);
-        setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
+
         return;
       }
+      dispatch(signInSuccess(data));
 
-      setLoading(false);
-      setErrorMessage(null);
-      
       if (res.ok) {
         navigate("/");
       }
     } catch (error) {
-      setLoading(false);
-      setErrorMessage(error.message);
+      dispatch(signInFailure(error.message));
     }
   };
 
@@ -82,11 +87,9 @@ function Signin() {
             Sign up
           </Link>
         </div>
-        {errorMessage && (
-            <Alert className="mt-5 text-red-600">
-              {errorMessage}
-            </Alert>
-          )}
+        {error && (
+          <Alert className="mt-5 text-red-600">{errorMessage}</Alert>
+        )}
       </div>
     </>
   );
