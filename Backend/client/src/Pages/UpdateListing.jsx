@@ -375,7 +375,7 @@ function UpdateListing() {
             disabled={loading || uploading}
             className="uppercase p-3 bg-slate-700 text-white rounded-lg hover:opactiy-955 "
           >
-            {loading ? "Creating..." : "Update Listing"}
+            {loading ? "Updating..." : "Update Listing"}
           </button>
           {error && <p className="text-red-700 text-sm ">{error}</p>}
         </div>
