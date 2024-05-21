@@ -10,7 +10,7 @@ import listingRouter from "./routes/listing.route.js";
 dotenv.config();
 
 mongoose
-  .connect("mongodb+srv://rohit:rohit@mern-estate.mohmtgd.mongodb.net/mern-estate?retryWrites=true&w=majority")
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("Mongodb is connected");
   })
